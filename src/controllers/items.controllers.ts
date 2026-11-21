@@ -1,75 +1,66 @@
-import { randomUUID } from "node:crypto";
-
+import { eq } from "drizzle-orm";
 import express, { type Request, type Response } from "express";
 
-import { categories, items } from "../data.js";
-import {
-	createItemSchema,
-	type Item,
-	updateItemSchema,
-} from "../types/item.types.js";
+import { db } from "../db.js";
+import { items } from "../schema.js";
+import { createItemSchema, updateItemSchema } from "../types/item.types.js";
 
 const router = express.Router();
 
-router.get("/items", (_req: Request, res: Response) => {
-	res.json(items);
+router.get("/items", async (_req: Request, res: Response) => {
+	res.json(await db.select().from(items));
 });
 
-router.get("/items/:id", (req: Request, res: Response) => {
-	const item = items.find((item) => item.id === req.params.id);
-	if (!item) return res.status(404).json({ error: "Item not found" });
-	res.json(item);
-});
+router.get(
+	"/items/:id",
+	async (req: Request<{ id: string }>, res: Response) => {
+		const [item] = await db
+			.select()
+			.from(items)
+			.where(eq(items.id, req.params.id));
+		if (!item) return res.status(404).json({ error: "Item not found" });
+		res.json(item);
+	},
+);
 
-router.post("/items", (req: Request, res: Response) => {
+router.post("/items", async (req: Request, res: Response) => {
 	const result = createItemSchema.safeParse(req.body);
 	if (!result.success) {
 		return res.status(400).json({ error: result.error.issues });
 	}
-	const data = result.data;
 
-	if (!categories.some((category) => category.id === data.categoryId)) {
-		return res.status(400).json({ error: "Category does not exist" });
-	}
-	if (items.some((item) => item.sku === data.sku)) {
-		return res.status(409).json({ error: "SKU already exists" });
-	}
-
-	const item: Item = { id: randomUUID(), ...data };
-	items.push(item);
+	const [item] = await db.insert(items).values(result.data).returning();
 	res.status(201).json(item);
 });
 
-router.patch("/items/:id", (req: Request, res: Response) => {
-	const item = items.find((item) => item.id === req.params.id);
-	if (!item) return res.status(404).json({ error: "Item not found" });
+router.patch(
+	"/items/:id",
+	async (req: Request<{ id: string }>, res: Response) => {
+		const result = updateItemSchema.safeParse(req.body);
+		if (!result.success) {
+			return res.status(400).json({ error: result.error.issues });
+		}
 
-	const result = updateItemSchema.safeParse(req.body);
-	if (!result.success) {
-		return res.status(400).json({ error: result.error.issues });
-	}
-	const changes = result.data;
+		const [item] = await db
+			.update(items)
+			.set(result.data)
+			.where(eq(items.id, req.params.id))
+			.returning();
+		if (!item) return res.status(404).json({ error: "Item not found" });
+		res.json(item);
+	},
+);
 
-	if (
-		changes.categoryId &&
-		!categories.some((category) => category.id === changes.categoryId)
-	) {
-		return res.status(400).json({ error: "Category does not exist" });
-	}
-	if (items.some((other) => other.sku === changes.sku && other !== item)) {
-		return res.status(409).json({ error: "SKU already exists" });
-	}
-
-	Object.assign(item, changes);
-	res.json(item);
-});
-
-router.delete("/items/:id", (req: Request, res: Response) => {
-	const index = items.findIndex((item) => item.id === req.params.id);
-	if (index === -1) return res.status(404).json({ error: "Item not found" });
-
-	const [deleted] = items.splice(index, 1);
-	res.json(deleted);
-});
+router.delete(
+	"/items/:id",
+	async (req: Request<{ id: string }>, res: Response) => {
+		const [item] = await db
+			.delete(items)
+			.where(eq(items.id, req.params.id))
+			.returning();
+		if (!item) return res.status(404).json({ error: "Item not found" });
+		res.json(item);
+	},
+);
 
 export default router;
