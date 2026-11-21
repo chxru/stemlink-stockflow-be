@@ -1,0 +1,27 @@
+meta {
+  name: Create Category
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/categories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Snacks"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setVar("categoryId", res.body.id);
+  }
+}
+
+docs {
+  On success, the new category's id is stored in `categoryId` for the other requests.
+}

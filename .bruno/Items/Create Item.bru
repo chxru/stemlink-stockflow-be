@@ -1,0 +1,32 @@
+meta {
+  name: Create Item
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/items
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sku": "SUG-1K-010",
+    "name": "White Sugar 1kg",
+    "categoryId": "{{categoryId}}",
+    "quantityOnHand": 500,
+    "reorderLevel": 100
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setVar("itemId", res.body.id);
+  }
+}
+
+docs {
+  `quantityOnHand` and `reorderLevel` are optional (default 0).
+  On success, the new item's id is stored in `itemId` for the other requests.
+}

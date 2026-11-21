@@ -1,0 +1,21 @@
+meta {
+  name: Update Item
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/items/{{itemId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "quantityOnHand": 250
+  }
+}
+
+docs {
+  Partial update: any of `sku`, `name`, `categoryId`, `quantityOnHand`, `reorderLevel`.
+}
