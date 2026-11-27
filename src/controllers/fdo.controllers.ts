@@ -1,5 +1,7 @@
 import express, { type Request, type Response } from "express";
 
+import { loadStockRequests } from "../lib/stock-requests.js";
+import { attachUser, currentUser } from "../middlewares/attach-user.js";
 import {
 	mockActiveRun,
 	mockFdo,
@@ -23,6 +25,10 @@ import { createStockRequestSchema } from "../types/stock-request.types.js";
 // database.
 const router = express.Router();
 
+// Every /fdo/* route needs to know who is calling. attachUser sets req.user,
+// or answers 401/403 itself. (Which roles may call these is Session 5.)
+router.use("/fdo", attachUser);
+
 // Summary cards on the FDO Stock Requests page.
 router.get("/fdo/summary", (_req: Request, res: Response) => {
 	// TODO(auth): figures for the FDO's home warehouse.
@@ -30,9 +36,9 @@ router.get("/fdo/summary", (_req: Request, res: Response) => {
 });
 
 // FDO Stock Requests page: the FDO's own requests.
-router.get("/fdo/stock-requests", (_req: Request, res: Response) => {
-	// TODO(auth): loadStockRequests(eq(stockRequests.fdoId, currentUser.id))
-	res.json(mockFdoStockRequests);
+router.get("/fdo/stock-requests", async (req: Request, res: Response) => {
+	const user = currentUser(req);
+	res.json(await loadStockRequests({ fdoId: user.id }));
 });
 
 // Request Stock dialog.

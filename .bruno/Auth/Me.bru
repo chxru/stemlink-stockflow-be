@@ -1,0 +1,20 @@
+meta {
+  name: Me
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  The signed-in user. Set `token` in the Local environment to a Clerk session
+  token (see README, "Calling the API with a token"). Without one: 401.
+}

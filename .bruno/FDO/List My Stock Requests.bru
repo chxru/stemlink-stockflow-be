@@ -7,9 +7,14 @@ meta {
 get {
   url: {{baseUrl}}/api/fdo/stock-requests
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
 }
 
 docs {
-  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+  Needs `token`: a Clerk session token of an FDO (see README, "Calling the API with a token").
+  Returns the signed-in FDO's own requests.
 }

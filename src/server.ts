@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import express, {
 	type NextFunction,
@@ -9,6 +10,7 @@ import morgan from "morgan";
 
 import distributionRunsRouter from "./controllers/distribution-runs.controllers.js";
 import fdoRouter from "./controllers/fdo.controllers.js";
+import meRouter from "./controllers/me.controllers.js";
 import outletsRouter from "./controllers/outlets.controllers.js";
 import productsRouter from "./controllers/products.controllers.js";
 import stockRouter from "./controllers/stock.controllers.js";
@@ -16,14 +18,37 @@ import stockRequestsRouter from "./controllers/stock-requests.controllers.js";
 import usersRouter from "./controllers/users.controllers.js";
 import warehousesRouter from "./controllers/warehouses.controllers.js";
 
+// clerkMiddleware can't verify anything without these, and every request
+// would fail with a vague 500. Fail loudly at startup instead.
+for (const name of ["CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY"]) {
+	if (!process.env[name]) {
+		console.error(
+			`Missing ${name}. Copy it from the Clerk dashboard into .env`,
+		);
+		process.exit(1);
+	}
+}
+
 const app = express();
 // the frontend's VITE_SERVER_URL points at 4000 (it runs on 3000 itself)
 const port = Number(process.env.PORT ?? 4000);
 
+// Browsers may only call this API from these origins (comma separated).
+// Native mobile apps aren't browsers, so CORS doesn't apply to them.
+const corsOrigins = (
+	process.env.CORS_ORIGINS ?? "http://localhost:3000,http://127.0.0.1:3000"
+)
+	.split(",")
+	.map((origin) => origin.trim());
+
 // middlewares
 app.use(morgan("tiny"));
-app.use(cors()); // the frontend runs on a different port
+app.use(cors({ origin: corsOrigins })); // the frontend runs on a different port
 app.use(express.json());
+// Reads the session token (Authorization: Bearer ... or the __session cookie),
+// checks its signature and expiry, and makes getAuth(req) work. It doesn't
+// block anyone: routes that need a user add the attachUser middleware.
+app.use(clerkMiddleware());
 
 // routes
 app.get("/health", (_req, res) => {
@@ -32,6 +57,7 @@ app.get("/health", (_req, res) => {
 
 app.use(
 	"/api",
+	meRouter,
 	warehousesRouter,
 	productsRouter,
 	outletsRouter,

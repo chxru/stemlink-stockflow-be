@@ -9,7 +9,9 @@
 		"typecheck": "tsc --noEmit",
 		"lint": "biome check",
 		"db:generate": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate"
+		"db:migrate": "drizzle-kit migrate",
+		"test": "tsx --test src/**/*.test.ts",
+		"jwt:demo": "tsx scripts/jwt-demo.ts"
 	},
 	"keywords": [],
 	"type": "module",
@@ -20,10 +22,12 @@
 		"@types/morgan": "^1.9.10",
 		"@types/node": "^26.6.6",
 		"drizzle-kit": "0.31.11",
+		"jose": "^6.2.18",
 		"tsx": "^4.23.15",
 		"typescript": "^7.0.2"
 	},
 	"dependencies": {
+		"@clerk/express": "^2.1.99",
 		"cors": "^2.8.5",
 		"dotenv": "^18.0.10",
 		"drizzle-orm": "0.45.4",

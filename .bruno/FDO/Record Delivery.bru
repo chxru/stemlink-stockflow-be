@@ -7,7 +7,11 @@ meta {
 post {
   url: {{baseUrl}}/api/fdo/distribution-runs/{{runId}}/deliveries
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
 }
 
 body:json {
@@ -24,6 +28,8 @@ body:json {
 }
 
 docs {
+  Needs `token`: a Clerk session token of an FDO (see README, "Calling the API with a token").
+
   `note` is optional.
 
   TODO(auth): returns mock data and writes nothing until the authentication lesson.
