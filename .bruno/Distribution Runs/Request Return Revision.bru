@@ -1,0 +1,21 @@
+meta {
+  name: Request Return Revision
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/distribution-runs/{{runId}}/revision-request
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "feedback": "Please recount the soap bars and resubmit."
+  }
+}
+
+docs {
+  Only works while the run is `return_submitted` (otherwise 409).
+}

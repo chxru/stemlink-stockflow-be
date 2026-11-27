@@ -1,0 +1,26 @@
+meta {
+  name: Record Stock Receipt
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/stock-receipts
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "warehouseCode": "{{warehouseCode}}",
+    "sku": "RIC-5K-001",
+    "quantity": 200,
+    "reference": "GRN-2026-0806"
+  }
+}
+
+docs {
+  `reference` is optional.
+
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

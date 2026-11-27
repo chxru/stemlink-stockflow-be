@@ -1,0 +1,36 @@
+meta {
+  name: Create Stock Request
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/fdo/stock-requests
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "warehouseCode": "{{warehouseCode}}",
+    "route": "Colombo North",
+    "plannedDate": "2026-12-01",
+    "note": "Stock running low at Colombo North outlets.",
+    "products": [
+      {
+        "productId": 1,
+        "quantity": 80
+      },
+      {
+        "productId": 6,
+        "quantity": 100
+      }
+    ]
+  }
+}
+
+docs {
+  `route`, `plannedDate` (YYYY-MM-DD) and `note` are optional.
+
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

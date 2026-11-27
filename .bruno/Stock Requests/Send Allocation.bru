@@ -1,0 +1,33 @@
+meta {
+  name: Send Allocation
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/stock-requests/{{requestId}}/allocation
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "note": "Black Tea reduced by 10 units to protect warehouse reserve stock.",
+    "products": [
+      {
+        "productId": 1,
+        "allocated": 80
+      },
+      {
+        "productId": 4,
+        "allocated": 50
+      }
+    ]
+  }
+}
+
+docs {
+  `note` is optional.
+
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

@@ -1,0 +1,11 @@
+meta {
+  name: Get Distribution Run
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/distribution-runs/{{runId}}
+  body: none
+  auth: none
+}

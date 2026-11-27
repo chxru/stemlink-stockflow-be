@@ -1,0 +1,21 @@
+meta {
+  name: List Stock Requests
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/stock-requests?status=pending
+  body: none
+  auth: none
+}
+
+params:query {
+  status: pending
+  ~warehouse: {{warehouseCode}}
+  ~fdoId: 2
+}
+
+docs {
+  `status`: pending | allocation_ready | approved | rejected. All filters are optional.
+}

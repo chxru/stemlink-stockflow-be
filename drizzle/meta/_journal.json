@@ -8,6 +8,27 @@
       "when": 1795265218237,
       "tag": "0000_misty_lyja",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795803809951,
+      "tag": "0001_drop_categories_items",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795803810869,
+      "tag": "0002_stockflow_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795804996519,
+      "tag": "0003_seed_reference_data",
+      "breakpoints": true
     }
   ]
 }

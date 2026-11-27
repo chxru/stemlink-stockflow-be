@@ -1,0 +1,19 @@
+meta {
+  name: Warehouse Stock
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/warehouses/{{warehouseCode}}/stock
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  warehouseCode: WH-1
+}
+
+docs {
+  Available stock per product in one warehouse (Request Stock dialog).
+}

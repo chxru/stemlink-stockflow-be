@@ -1,0 +1,21 @@
+meta {
+  name: Reject Stock Request
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/stock-requests/{{requestId}}/rejection
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "reason": "Only one active run is permitted at a time."
+  }
+}
+
+docs {
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

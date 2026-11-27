@@ -1,0 +1,11 @@
+meta {
+  name: Get Stock Request
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/stock-requests/{{requestId}}
+  body: none
+  auth: none
+}

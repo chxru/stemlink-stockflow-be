@@ -1,0 +1,15 @@
+meta {
+  name: Confirm Collection
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/fdo/distribution-runs/{{runId}}/collection
+  body: none
+  auth: none
+}
+
+docs {
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

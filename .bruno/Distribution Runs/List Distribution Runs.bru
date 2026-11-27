@@ -1,0 +1,23 @@
+meta {
+  name: List Distribution Runs
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/distribution-runs
+  body: none
+  auth: none
+}
+
+params:query {
+  ~status: return_submitted
+  ~warehouse: {{warehouseCode}}
+  ~fdoId: 2
+}
+
+docs {
+  `status`: awaiting_collection | in_progress | return_submitted | revision_requested | closed.
+
+  Return Approvals uses `status=return_submitted` (pending) and `status=closed` (accepted).
+}

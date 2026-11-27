@@ -1,0 +1,30 @@
+meta {
+  name: Record Delivery
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/fdo/distribution-runs/{{runId}}/deliveries
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "outletId": 1,
+    "note": "Delivered before noon.",
+    "products": [
+      {
+        "productId": 3,
+        "quantity": 20
+      }
+    ]
+  }
+}
+
+docs {
+  `note` is optional.
+
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

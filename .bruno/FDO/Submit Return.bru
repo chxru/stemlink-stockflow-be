@@ -1,0 +1,33 @@
+meta {
+  name: Submit Return
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/fdo/distribution-runs/{{runId}}/return
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "note": "Two tea packs damaged.",
+    "products": [
+      {
+        "productId": 3,
+        "declaredReturn": 30
+      },
+      {
+        "productId": 4,
+        "declaredReturn": 38
+      }
+    ]
+  }
+}
+
+docs {
+  `note` is optional (required by the real version when there is a variance).
+
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

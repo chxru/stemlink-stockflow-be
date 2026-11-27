@@ -1,0 +1,15 @@
+meta {
+  name: List My Stock Requests
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/fdo/stock-requests
+  body: none
+  auth: none
+}
+
+docs {
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

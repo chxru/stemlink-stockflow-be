@@ -1,0 +1,33 @@
+meta {
+  name: Accept Return
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/distribution-runs/{{runId}}/acceptance
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "note": "Variance confirmed, recorded for reconciliation.",
+    "products": [
+      {
+        "productId": 4,
+        "verifiedReturn": 22
+      },
+      {
+        "productId": 5,
+        "verifiedReturn": 28
+      }
+    ]
+  }
+}
+
+docs {
+  `note` is optional (required by the real version when there is a variance).
+
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}

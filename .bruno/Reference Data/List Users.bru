@@ -1,0 +1,20 @@
+meta {
+  name: List Users
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/users?role=fdo
+  body: none
+  auth: none
+}
+
+params:query {
+  role: fdo
+  ~warehouse: {{warehouseCode}}
+}
+
+docs {
+  `role`: stock_manager | fdo. `warehouse`: home warehouse code.
+}

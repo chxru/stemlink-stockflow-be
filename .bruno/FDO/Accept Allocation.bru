@@ -1,0 +1,15 @@
+meta {
+  name: Accept Allocation
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/fdo/stock-requests/{{requestId}}/acceptance
+  body: none
+  auth: none
+}
+
+docs {
+  TODO(auth): returns mock data and writes nothing until the authentication lesson.
+}
